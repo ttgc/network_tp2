@@ -1,0 +1,9 @@
+[submodule "external/uvw"]
+	path = external/uvw
+	url = https://github.com/skypjack/uvw
+[submodule "external/libuv"]
+	path = external/libuv
+	url = https://github.com/libuv/libuv
+[submodule "external/GSL"]
+	path = external/GSL
+	url = https://github.com/microsoft/GSL
