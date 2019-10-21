@@ -1,5 +1,6 @@
 #pragma once
 #include "coordinates.hpp"
+#include <gsl/span>
 
 namespace compression
 {
@@ -30,5 +31,25 @@ namespace compression
 
 	private:
 		float uncompressFloat(uint16_t value) const noexcept;
+	};
+
+	template <typename T>
+	class ByteArrayUncompressor : Uncompressor<gsl::span<std::byte>, T>
+	{
+	public:
+		T operator()(const gsl::span<std::byte>& value) const noexcept override
+		{
+			static_assert(std::is_copy_constructible<T>::value &&
+				(std::is_arithmetic<T>::value || std::is_enum<T>::value), "This uncompressor only support primitive data type as output");
+			static_assert(sizeof(T) == value.size(), "T should have the same size as the input value");
+
+			T uncompressed;
+			for (size_t i(0); i < value.size(); i++)
+			{
+				uncompressed |= (value[value.size() - 1 - i] << (i * 8));
+			}
+
+			return uncompressed;
+		}
 	};
 }

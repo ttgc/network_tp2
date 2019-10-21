@@ -1,4 +1,5 @@
 #include "uncompress.hpp"
+#include <cmath>
 
 namespace compression
 {

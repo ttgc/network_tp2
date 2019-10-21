@@ -1,6 +1,5 @@
 #pragma once
 #include <stdint.h>
-#include <gsl/gsl>
 
 namespace coordinates
 {
@@ -30,7 +29,7 @@ namespace coordinates
 
 		struct Quaternion
 		{
-			enum QuaternionParameter : uint8_t
+			enum class QuaternionParameter : uint8_t
 			{
 				x = 0b00,
 				y = 0b01,
