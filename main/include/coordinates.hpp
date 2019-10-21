@@ -28,7 +28,6 @@ namespace coordinates
 			uint32_t z;
 		};
 
-		template <size_t MAX_SIZE>
 		struct Quaternion
 		{
 			enum QuaternionParameter : uint8_t
@@ -46,3 +45,11 @@ namespace coordinates
 		};
 	}
 }
+
+#ifndef NO_ALIAS
+using PositionType = coordinates::Position;
+using QuaternionType = coordinates::Quaternion;
+using CompressedPosType = coordinates::compressed::Position;
+using CompressedQuatType = coordinates::compressed::Quaternion;
+using QuaternionParameterType = coordinates::compressed::Quaternion::QuaternionParameter;
+#endif // !NO_ALIAS
