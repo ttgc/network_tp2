@@ -13,10 +13,12 @@ public:
 	void registerClass(std::function<GameObject* ()> generator)
 	{
 		static_assert(std::is_base_of<GameObject, T>::value, "T should be a GameObject");
-		m_generators.insert(T::mClassID, generator);
+		const auto pair = 
+			std::pair<ReplicationClassID, std::function<GameObject* ()> >(T::mClassID, generator);
+		m_generators.insert(pair);
 	}
 
-	inline GameObject* create(ReplicationClassID classID);
+	GameObject* create(ReplicationClassID classID);
 
 private:
 	ClassRegistry() = default;

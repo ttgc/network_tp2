@@ -9,7 +9,7 @@ std::weak_ptr<ClassRegistry> ClassRegistry::get()
 	return s_instance;
 }
 
-inline GameObject* ClassRegistry::create(ReplicationClassID classID)
+GameObject* ClassRegistry::create(ReplicationClassID classID)
 {
 	return m_generators.find(classID) != m_generators.end() ? m_generators.at(classID)() : nullptr;
 }
