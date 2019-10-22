@@ -7,8 +7,7 @@ using NetworkID = uint32_t;
 
 
 LinkingContext::LinkingContext() 
-	: currentId(0)
-	, idObjt()
+	: idObjt()
 	, pointObjt()
 {
 
