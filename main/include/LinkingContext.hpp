@@ -19,7 +19,6 @@ public:
 	std::optional<GameObject*> getObjectFromID(NetworkID id);
 
 private:
-	NetworkID currentId = 0;
 	std::map<NetworkID, GameObject*> idObjt;
 	std::map<GameObject*, NetworkID> pointObjt;
 };
