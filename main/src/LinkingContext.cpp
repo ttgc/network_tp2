@@ -23,18 +23,18 @@ void LinkingContext::addGameObjectAndID(NetworkID id, GameObject* obj)
 
 void LinkingContext::deletePointer(GameObject* obj)
 {
-	NetworkID id;
 	const auto deletedObject = pointObjt.find(obj);
 
 	if (deletedObject != pointObjt.end())
 	{
-		id = deletedObject->second;
+		NetworkID id = deletedObject->second;
 		pointObjt.erase(deletedObject);
-	}
-	const auto deletedId = idObjt.find(id);
+		const auto deletedId = idObjt.find(id);
 
-	if (deletedId != idObjt.end())
-		idObjt.erase(deletedId);
+		if (deletedId != idObjt.end())
+			idObjt.erase(deletedId);
+	}
+	
 }
 
 void LinkingContext::addGameObject(GameObject* obj)
