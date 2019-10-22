@@ -9,11 +9,6 @@ class LinkingContext
 {
 public:
 
-	//Modifier int en Id GameObject
-
-	std::map<NetworkID, GameObject*> idObjt;
-	std::map<GameObject*, NetworkID> pointObjt;
-
 	LinkingContext(std::map<NetworkID, GameObject*> idObjt, std::map<GameObject*, ReplicationClassID> pointObjt);
 
 	void addGameObjectAndID(NetworkID id, GameObject obj);
@@ -26,5 +21,6 @@ public:
 
 private:
 	NetworkID currentId = 0;
-	
+	std::map<NetworkID, GameObject*> idObjt;
+	std::map<GameObject*, NetworkID> pointObjt;
 };
