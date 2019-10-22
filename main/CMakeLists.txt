@@ -8,6 +8,7 @@ set(replication_sources src/main.cpp
 						src/player.cpp
 						src/enemy.cpp
 						src/classregistry.cpp
+			            src/LinkingContext.cpp
 						src/replicationmanager.cpp)
 
 include_directories(include)
@@ -20,6 +21,7 @@ set(replication_headers include/game_object.hpp
 						include/player.hpp
 						include/enemy.hpp
 						include/classregistry.hpp
+			            include/LinkingContext.hpp
 						include/replicationmanager.hpp
 						include/networkutils.hpp)
 
