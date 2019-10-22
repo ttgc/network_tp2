@@ -9,23 +9,21 @@ void ReplicationManager::replicate(MemoryStream& stream, const std::vector<GameO
 	stream.Write<const uint32_t>(utils::PROTOCOL_ID);
 	stream.Write<utils::PacketType>(s_syncPacket);
 
-	OutputStream ostream;
+	MemoryStream ostream;
 	std::for_each(objects.begin(), objects.end(), [&ostream](GameObject* obj) {
 		ostream.Write<ReplicationClassID>(obj->ClassID);
 		//ostream.Write(networkID);
-		obj->write(ostream);
+		obj->write(reinterpret_cast<OutputStream&>(ostream));
 	});
-	stream.Write<const size_t>(ostream.Size());
 	stream.Write(ostream.Read(ostream.Size()));
 }
 
 void ReplicationManager::replicate(MemoryStream& stream)
 {
-	if (!(stream.Read<const uint32_t>() == utils::PROTOCOL_ID)) return;
-	if (!(stream.Read<utils::PacketType>() == s_syncPacket)) return;
+	if (stream.Read<const uint32_t>() != utils::PROTOCOL_ID) return;
+	if (stream.Read<utils::PacketType>() != s_syncPacket) return;
 	const auto registry = ClassRegistry::get();
 	std::vector<GameObject*> streamContent;
-	const size_t size = stream.Read<const size_t>();
 
 	while (stream.Size() > 0)
 	{
@@ -61,4 +59,5 @@ void ReplicationManager::replicate(MemoryStream& stream)
 		}
 	);
 	m_replicated.erase(newend, m_replicated.end());
+	stream.Flush();
 }
