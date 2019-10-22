@@ -9,14 +9,13 @@ class LinkingContext
 {
 public:
 
-	LinkingContext(std::map<NetworkID, GameObject*> idObjt, std::map<GameObject*, ReplicationClassID> pointObjt);
-
-	void addGameObjectAndID(NetworkID id, GameObject obj);
+	LinkingContext();
+	void addGameObjectAndID(NetworkID id, GameObject* obj);
 
 	void deletePointer(GameObject* obj);
 	void addGameObject(GameObject* obj);
 
-	std::optional<int> getIDFromObject(GameObject* obj);
+	std::optional<NetworkID> getIDFromObject(GameObject* obj);
 	std::optional<GameObject*> getObjectFromID(NetworkID id);
 
 private:

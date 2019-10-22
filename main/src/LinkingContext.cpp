@@ -1,44 +1,60 @@
 #include "LinkingContext.hpp"
 #include "game_object.hpp"
 #include <optional>
+#include <algorithm>
 
 using NetworkID = uint32_t;
 
 
-LinkingContext::LinkingContext(std::map<NetworkID, GameObject*> idObjt, std::map<GameObject*, ReplicationClassID> pointObjt){
+LinkingContext::LinkingContext() 
+	: currentId(0)
+	, idObjt()
+	, pointObjt()
+{
 
 }
 
-void LinkingContext::addGameObjectAndID(NetworkID id, GameObject obj)
+void LinkingContext::addGameObjectAndID(NetworkID id, GameObject* obj)
 {
-	
-	//std::pair<int, GameObject*>(1, &obj);
 
-	idObjt.insert(std::pair<NetworkID, GameObject*>(id, &obj));
-	pointObjt.insert(std::pair<GameObject*, NetworkID>(&obj, id));
+	idObjt.insert(std::pair<NetworkID, GameObject*>(id, obj));
+	pointObjt.insert(std::pair<GameObject*, NetworkID>(obj, id));
 }
 
 void LinkingContext::deletePointer(GameObject* obj)
 {
-	std::map<GameObject*, NetworkID>::iterator deleted;
+	std::map<GameObject*, NetworkID>::iterator deletedObject;
 
-	deleted = pointObjt.find(obj);
+	NetworkID id;
 
-	if (deleted != pointObjt.end())
-		pointObjt.erase(deleted);
+	std::map<NetworkID, GameObject*>::iterator deletedId;
+
+	const auto deletedObject = pointObjt.find(obj);
+
+	if (deletedObject != pointObjt.end())
+	{
+		id = deletedObject->second;
+		pointObjt.erase(deletedObject);
+	}
+	const auto deletedId = idObjt.find(id);
+
+	if (deletedId != idObjt.end())
+		idObjt.erase(deletedId);
 }
 
 void LinkingContext::addGameObject(GameObject* obj)
 {
-	
+
+	currentId = std::max_element(idObjt.begin(), idObjt.end(), [](const std::pair<NetworkID, GameObject*> a, const std::pair<NetworkID, GameObject*> b)
+		{
+			return a.first < b.first;
+		})->first + 1;
 
 	idObjt.insert(std::pair<NetworkID, GameObject*>(currentId, obj));
 	pointObjt.insert(std::pair<GameObject*, NetworkID>(obj, currentId));
-
-	currentId++;
 }
 
-std::optional<int> LinkingContext::getIDFromObject(GameObject* obj)
+std::optional<NetworkID> LinkingContext::getIDFromObject(GameObject* obj)
 {
 
 	const auto iterator = pointObjt.find(obj);
