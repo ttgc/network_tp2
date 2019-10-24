@@ -2,7 +2,7 @@
 
 namespace utils
 {
-	constexpr uint32_t PROTOCOL_ID = 0xC0FFEE;
+	constexpr uint8_t PROTOCOL_ID = 0xC0;
 	constexpr size_t MAX_PACKET_SIZE = 1024;
 
 	enum class PacketType : uint8_t

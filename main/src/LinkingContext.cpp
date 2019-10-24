@@ -3,14 +3,13 @@
 #include <optional>
 #include <algorithm>
 
-using NetworkID = uint32_t;
+std::shared_ptr<LinkingContext> LinkingContext::s_instance = nullptr;
 
-
-LinkingContext::LinkingContext() 
-	: idObjt()
-	, pointObjt()
+std::weak_ptr<LinkingContext> LinkingContext::get()
 {
-
+	class LinkingContextInitializer : public LinkingContext {};
+	if (s_instance == nullptr) s_instance = std::make_shared<LinkingContextInitializer>();
+	return s_instance;
 }
 
 void LinkingContext::addGameObjectAndID(NetworkID id, GameObject* obj)
