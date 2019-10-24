@@ -8,13 +8,14 @@
 #include <gsl/gsl>
 
 #include "utils.hpp"
+#include "networkutils.hpp"
 
 class MemoryStream
 {
 public:
     MemoryStream() : m_cursor(0)
     {
-        m_buffer.reserve(64);
+        m_buffer.reserve(utils::MAX_PACKET_SIZE);
     }
 
     void Write(gsl::not_null<void*> data, size_t length);
