@@ -7,7 +7,7 @@ utils::PacketType ReplicationManager::s_syncPacket = utils::PacketType::Sync;
 void ReplicationManager::replicate(MemoryStream& stream, const std::vector<GameObject*> objects)
 {
 	stream.Flush();
-	stream.Write<const uint8_t>(utils::PROTOCOL_ID);
+	stream.Write<const uint32_t>(utils::PROTOCOL_ID);
 	stream.Write<utils::PacketType>(s_syncPacket);
 
 	const auto ctx = LinkingContext::get();
@@ -28,7 +28,7 @@ void ReplicationManager::replicate(MemoryStream& stream, const std::vector<GameO
 void ReplicationManager::replicate(MemoryStream& stream)
 {
 	if (stream.Size() < 2) return;
-	if (stream.Read<uint8_t>() != utils::PROTOCOL_ID) return;
+	if (stream.Read<uint32_t>() != utils::PROTOCOL_ID) return;
 	if (stream.Read<utils::PacketType>() != s_syncPacket) return;
 	const auto registry = ClassRegistry::get();
 	const auto ctx = LinkingContext::get();
