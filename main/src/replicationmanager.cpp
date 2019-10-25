@@ -27,14 +27,14 @@ void ReplicationManager::replicate(MemoryStream& stream, const std::vector<GameO
 
 void ReplicationManager::replicate(MemoryStream& stream)
 {
-	if (stream.Size() < 2) return;
+	if (stream.RemainingSize() < 2) return;
 	if (stream.Read<uint32_t>() != utils::PROTOCOL_ID) return;
 	if (stream.Read<utils::PacketType>() != s_syncPacket) return;
 	const auto registry = ClassRegistry::get();
 	const auto ctx = LinkingContext::get();
 	std::vector<GameObject*> streamContent;
 
-	while (stream.Size() > 0)
+	while (stream.RemainingSize() > 0)
 	{
 		const ReplicationClassID classID = stream.Read<ReplicationClassID>();
 		const NetworkID networkID = stream.Read<NetworkID>();

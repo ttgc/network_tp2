@@ -39,7 +39,7 @@ public:
         Write((void*)&data, sizeof(data));
     }
 
-    size_t Size() { return m_buffer.size(); }
+    size_t Size() const { return m_buffer.size(); }
     size_t RemainingSize() const { return m_buffer.size() - m_cursor; }
 
     gsl::span<std::byte> Read(size_t length)
