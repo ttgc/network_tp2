@@ -19,6 +19,7 @@ namespace server
             Server(Server&& other) = default;
             Server(const Server& other) = delete;
             Server& operator=(const Server& s) = delete;
+Server& operator=(Server&& s) = default;
 
         private:
 
