@@ -22,10 +22,15 @@ namespace client
 
             tcp->on<uvw::DataEvent>([this](const uvw::DataEvent& evt, uvw::TCPHandle &)
             {
-                std::cout << "Replication data : " << evt.data.get() << " received." << std::endl;
                 gsl::span<char> receivedData(evt.data.get(), evt.length);
                 InputStream receivedStream(receivedData);
                 m_repManager.replicate(receivedStream);
+                std::vector<GameObject> vectObjects;
+                std::for_each(vectObjects.begin(), vectObjects.end(), [this](auto Obj) 
+                    {
+                        std::cout << "Replication data : " << Obj << " received." << std::endl;
+                    }
+                );
             });
 
             m_ConnectionClient = tcp;
