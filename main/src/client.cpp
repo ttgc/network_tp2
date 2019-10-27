@@ -26,6 +26,7 @@ namespace client
             tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &)
             {
                 //reçoit les données du send dans evt, doit déserialiser
+                //***** Besoin de faire un read ou les données sont déjà dans evt ?
                 std::cout << "Afficher le type d'objet reçu, voir avec Thomas pour sa replication" << std::endl;
             });
 

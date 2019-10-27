@@ -22,7 +22,8 @@ namespace server
                     ptr->close();
                     if (!m_listClient.empty())
                     {
-                        std::remove(m_listClient.begin(), m_listClient.end(), ptr);
+                        auto res = std::remove(m_listClient.begin(), m_listClient.end(), ptr);
+                        m_listClient.erase(res, m_listClient.end());
                     }
                 });
                 
@@ -31,7 +32,8 @@ namespace server
                     client.close();
                     if (!m_listClient.empty())
                     {
-                        std::remove(m_listClient.begin(), m_listClient.end(), client);
+                        auto res = std::remove(m_listClient.begin(), m_listClient.end(), client);
+                        m_listClient.erase(res, m_listClient.end());
                     }
                 });
                 srv.accept(*client);
@@ -51,6 +53,7 @@ namespace server
             std::for_each(m_listClient.begin(), m_listClient.end(),
                 [this](std::shared_ptr<uvw::TCPHandle> client) {
                     client->stop();
+                    client->clear();
                     client->close();
                 }
             );
