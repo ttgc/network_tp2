@@ -57,7 +57,7 @@ namespace server
     {
         char* pointeur = reinterpret_cast<char*>(ptr);
         std::for_each(m_listClient.begin(), m_listClient.end(),[pointeur, SIZE](std::shared_ptr<uvw::TCPHandle> client) {
-            if (!(client == nullptr) || !(client->closing()))
+            if ((client != nullptr) && (client->active()))
             client->write(pointeur, SIZE);
         });
     
