@@ -2,6 +2,9 @@
 #include <string>
 
 #include "game_object.hpp"
+#include "classregistry.hpp"
+#include "enemy.hpp"
+#include "player.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -15,22 +18,28 @@ int main(int argc, char* argv[])
 
 	if (argv[1] == "server") 
 	{
+
+		const auto registry = ClassRegistry::get();
+
 		std::string server;
 		server = argv[1];
 
 		//create server
 
-		GameObject object1;
-		GameObject object2;
-		GameObject object3;
+		registry.lock()->registerClass<GameObject>(GameObject::CreateInstance);
+		std::cin.ignore();
+
+		registry.lock()->registerClass<Player>(Player::CreateInstance);
+		std::cin.ignore();
+
+		registry.lock()->registerClass<Enemy>(Enemy::CreateInstance);
 
 		std::cin.ignore();
 
-		//Enregistrer dans gestionnaire de réplication
 		//Supprimer l'objet
 
 	}
-	else if(argv[1] == "server")
+	else if(argv[1] == "client")
 	{
 		std::string client;
 		client = argv[1];
