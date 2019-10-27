@@ -12,6 +12,8 @@ public:
 	void replicate(MemoryStream& stream, const std::vector<GameObject*> objects);
 	void replicate(MemoryStream& stream);
 
+	std::vector<GameObject> getObjects();
+
 private:
 	std::unordered_set<GameObject*> m_replicated;
 	static utils::PacketType s_syncPacket;

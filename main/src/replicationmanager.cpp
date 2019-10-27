@@ -71,3 +71,12 @@ void ReplicationManager::replicate(MemoryStream& stream)
 	});
 	stream.Flush();
 }
+
+std::vector<GameObject> ReplicationManager::getObjects()
+{
+	std::vector<GameObject> objects(m_replicated.size());
+	std::transform(m_replicated.begin(), m_replicated.end(), objects.begin(), 
+		[](GameObject* obj) -> GameObject { return GameObject(*obj); }
+	);
+	return objects;
+}
