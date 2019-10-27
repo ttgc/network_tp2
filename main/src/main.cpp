@@ -44,13 +44,14 @@ int main(int argc, char* argv[])
 		registry.lock()->registerClass<Enemy>(Enemy::CreateInstance);
 
 
-		//create server
 
 		
 		GameObject object;
 
 		vect.push_back(&object);
 		replication.lock()->replicate(stream, vect);
+
+		std::cout << "Object has been added." << std::endl;
 		
 		std::cin.ignore();
 
@@ -59,6 +60,8 @@ int main(int argc, char* argv[])
 		vect.push_back(&player);
 		replication.lock()->replicate(stream, vect);
 
+		std::cout << "Player has been added." << std::endl;
+
 		std::cin.ignore();
 
 		Enemy enemy;
@@ -66,25 +69,23 @@ int main(int argc, char* argv[])
 		vect.push_back(&enemy);
 		replication.lock()->replicate(stream, vect);
 
+		std::cout << "Enemy has been added." << std::endl;
+
 		std::cin.ignore();
 
 		vect.erase(vect.begin());
 
+		std::cout << "Object has been deleted." << std::endl;
+
 		std::cin.ignore();
 
-		//Supprimer l'objet
 
 	}
 	else if(argv[1] == "client")
 	{
-		std::string client;
-		client = argv[1];
+		
+		client::Client client(ip, port);
 
-		//Create and start a client
-
-		//Receive data from replication
-
-		//print objects
 	}
 	else 
 	{
