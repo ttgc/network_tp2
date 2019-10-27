@@ -21,6 +21,7 @@ namespace client
             Client(Client&& other) = default;
             Client(const Client& other) = delete;
             Client& operator=(const Client& s) = delete;
+Client& operator=(Client&& s) = default;
 
         private:
 
