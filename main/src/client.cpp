@@ -26,9 +26,9 @@ namespace client
                 InputStream receivedStream(receivedData);
                 m_repManager.replicate(receivedStream);
                 std::vector<GameObject> vectObjects = m_repManager.getObjects();
-                std::for_each(vectObjects.begin(), vectObjects.end(), [this](auto Obj) 
+                std::for_each(vectObjects.begin(), vectObjects.end(), [this](GameObject Obj) 
                     {
-                        std::cout << "Replication data : " << Obj << " received." << std::endl;
+                        std::cout << "Replication data : " << Obj.ClassID() << " received." << std::endl;
                     }
                 );
             });
