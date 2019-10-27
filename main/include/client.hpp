@@ -19,7 +19,7 @@ namespace client
             Client(const std::string& ip, uint16_t port) noexcept;
             virtual ~Client() noexcept;
             Client(Client&& other) = default;
-            Client(const Client& other) = default;
+            Client(const Client& other) = delete;
             Client& operator=(const Client& s) = delete;
 
         private:
