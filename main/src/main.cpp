@@ -1,46 +1,49 @@
 #include <iostream>
+#include <string>
 
-#include <uvw.hpp>
-#include <memory>
+#include "game_object.hpp"
 
-void listen(uvw::Loop &loop) {
-    std::shared_ptr<uvw::TCPHandle> tcp = loop.resource<uvw::TCPHandle>();
+int main(int argc, char* argv[])
+{
+	bool choice;
+	std::string ip;
+	std::string port;
 
-    tcp->once<uvw::ListenEvent>([](const uvw::ListenEvent &, uvw::TCPHandle &srv) {
-        std::shared_ptr<uvw::TCPHandle> client = srv.loop().resource<uvw::TCPHandle>();
+	ip = argv[2];
+	port = argv[3];
 
-        client->on<uvw::CloseEvent>([ptr = srv.shared_from_this()](const uvw::CloseEvent &, uvw::TCPHandle &) { ptr->close(); });
-        client->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::TCPHandle &client) { client.close(); });
 
-        srv.accept(*client);
-        client->read();
-    });
+	if (argv[1] == "server") 
+	{
+		std::string server;
+		server = argv[1];
 
-    tcp->bind("127.0.0.1", 4242);
-    tcp->listen();
-}
+		//create server
 
-void conn(uvw::Loop &loop) {
-    auto tcp = loop.resource<uvw::TCPHandle>();
+		GameObject object1;
+		GameObject object2;
+		GameObject object3;
 
-    tcp->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &, uvw::TCPHandle &) { /* handle errors */ });
+		std::cin.ignore();
 
-    tcp->on<uvw::ConnectEvent>([](const uvw::ConnectEvent &, uvw::TCPHandle &tcp) {
-        auto dataWrite = std::unique_ptr<char[]>(new char[2]{ 'b', 'c' });
-        tcp.write(std::move(dataWrite), 2);
-        tcp.close();
-    });
+		//Enregistrer dans gestionnaire de réplication
+		//Supprimer l'objet
 
-    tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &){
-        std::cout << evt.data.get() << std::endl;
-    });
+	}
+	else if(argv[1] == "server")
+	{
+		std::string client;
+		client = argv[1];
 
-    tcp->connect(std::string{"127.0.0.1"}, 4242);
-}
+		//Create and start a client
 
-int main() {
-    auto loop = uvw::Loop::getDefault();
-    listen(*loop);
-    conn(*loop);
-    loop->run();
+		//Receive data from replication
+
+		//print objects
+	}
+	else 
+	{
+		std::cout << "Please choose wisely between server or client in the command line" << std::endl;
+	}
+	
 }
