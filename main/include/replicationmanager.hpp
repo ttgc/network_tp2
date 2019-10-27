@@ -14,7 +14,7 @@ public:
 	void replicate(MemoryStream& stream, const std::vector<GameObject*>& objects);
 	void replicate(MemoryStream& stream);
 
-	std::vector<GameObject> getObjects();
+	std::vector<GameObject*> getObjects();
 
 private:
 	ReplicationManager() = default;

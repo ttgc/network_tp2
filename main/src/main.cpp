@@ -24,23 +24,24 @@ int main(int argc, char* argv[])
 	std::string ip(argv[2]);
 	uint16_t port(atoi(argv[3]));
 
+
+	const auto registry = ClassRegistry::get();
+	registry.lock()->registerClass<GameObject>(GameObject::CreateInstance);
+	registry.lock()->registerClass<Player>(Player::CreateInstance);
+	registry.lock()->registerClass<Enemy>(Enemy::CreateInstance);
+
 	if (mode == "server") 
 	{
 		
 		server::Server server(ip, port);
-		const auto registry = ClassRegistry::get();
+		std::cout << "server is running on " << ip << ":" << port << std::endl;
+		std::cin.ignore();
+
 		const auto replication = ReplicationManager::get();
 		
 		OutputStream stream;
 
 		std::vector<GameObject*> vect;
-
-		registry.lock()->registerClass<GameObject>(GameObject::CreateInstance);
-		registry.lock()->registerClass<Player>(Player::CreateInstance);
-		registry.lock()->registerClass<Enemy>(Enemy::CreateInstance);
-
-
-
 		
 		GameObject object;
 
@@ -56,7 +57,7 @@ int main(int argc, char* argv[])
 		Player player;
 
 		coordinates::Position pos = { 50.0, 450.5, 10.333 };
-		coordinates::Quaternion rot = { -0.4, 0.4, 0.005, -0.455 };
+		coordinates::Quaternion rot = { -0.763, -0.002, -0.614, 0.205 };
 
 		player.setName("Jean michel");
 		player.setPosition(pos);
@@ -77,7 +78,7 @@ int main(int argc, char* argv[])
 		Enemy enemy;
 
 		pos = { 500.0, 12.5, 450.333 };
-		rot = { 0.4, -0.356, -0.5, -0.875 };
+		rot = { -0.607, 0.002, 0.754, -0.251 };
 
 		enemy.setType("Goblin");
 		enemy.setPosition(pos);
@@ -94,27 +95,29 @@ int main(int argc, char* argv[])
 
 
 		pos = { 12.05, 16.25, 254.333 };
-		rot = { 0.054, 0.536, -0.005, -0.875 };
+		rot = { -0.607, 0.002, 0.754, -0.251 };
 
-		player.setName("New name");
-		player.setPosition(pos);
-		player.setRotation(rot);
+		reinterpret_cast<Player*>(vect[1])->setName("New name");
+		reinterpret_cast<Player*>(vect[1])->setPosition(pos);
+		reinterpret_cast<Player*>(vect[1])->setRotation(rot);
 
 		std::cout << "Name, position and rotation of player updated." << std::endl;
 
+		replication.lock()->replicate(stream, vect);
 		server.Send(reinterpret_cast<uint8_t*>(stream.Data().data()), stream.Size());
 
 		std::cin.ignore();
 
 		pos = { 26, 334.632, 159.053 };
-		rot = { 0.054, 0.536, -0.005, -0.875 };
+		rot = { -0.763, -0.002, -0.614, 0.205 };
 
-		enemy.setType("Troll");
-		enemy.setPosition(pos);
-		enemy.setRotation(rot);
+		reinterpret_cast<Enemy*>(vect[2])->setType("Troll");
+		reinterpret_cast<Enemy*>(vect[2])->setPosition(pos);
+		reinterpret_cast<Enemy*>(vect[2])->setRotation(rot);
 
 		std::cout << "Type, position and rotation of enemy updated." << std::endl;
 
+		replication.lock()->replicate(stream, vect);
 		server.Send(reinterpret_cast<uint8_t*>(stream.Data().data()), stream.Size());
 
 		std::cin.ignore();
@@ -124,6 +127,7 @@ int main(int argc, char* argv[])
 
 		std::cout << "Object has been deleted." << std::endl;
 
+		replication.lock()->replicate(stream, vect);
 		server.Send(reinterpret_cast<uint8_t*>(stream.Data().data()), stream.Size());
 
 		std::cin.ignore();
@@ -134,7 +138,6 @@ int main(int argc, char* argv[])
 	{
 		
 		client::Client client(ip, port);
-
 	}
 	else 
 	{
