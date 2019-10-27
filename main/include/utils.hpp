@@ -30,7 +30,7 @@ T SwapEndian(const T &val)
 {
     union U 
     {
-        std::remove_const<T>::type val;
+        typename std::remove_const<T>::type val;
         std::array<std::uint8_t, sizeof(T)> raw;
     } src, dst;
 
