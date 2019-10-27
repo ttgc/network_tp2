@@ -11,6 +11,7 @@
 #include "client.hpp"
 #include "replicationmanager.hpp"
 #include "streams.hpp"
+#include "coordinates.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -57,14 +58,31 @@ int main(int argc, char* argv[])
 
 		Player player;
 
+		coordinates::Position pos = { 50.0, 450.5, 10.333 };
+		coordinates::Quaternion rot = { -0.4, 0.4, 0.005, -0.455 };
+
+		player.setName("Jean michel");
+		player.setPosition(pos);
+		player.setRotation(rot);
+
 		vect.push_back(&player);
+
 		replication.lock()->replicate(stream, vect);
 
 		std::cout << "Player has been added." << std::endl;
 
 		std::cin.ignore();
 
+
+
 		Enemy enemy;
+
+		pos = { 500.0, 12.5, 450.333 };
+		rot = { 0.4, -0.356, -0.5, -0.875 };
+
+		enemy.setType("Goblin");
+		enemy.setPosition(pos);
+		enemy.setRotation(rot);
 
 		vect.push_back(&enemy);
 		replication.lock()->replicate(stream, vect);
@@ -72,6 +90,30 @@ int main(int argc, char* argv[])
 		std::cout << "Enemy has been added." << std::endl;
 
 		std::cin.ignore();
+
+
+		pos = { 12.05, 16.25, 254.333 };
+		rot = { 0.054, 0.536, -0.005, -0.875 };
+
+		player.setName("New name");
+		player.setPosition(pos);
+		player.setRotation(rot);
+
+		std::cout << "Name, position and rotation of player updated." << std::endl;
+
+		std::cin.ignore();
+
+		pos = { 26, 334.632, 159.053 };
+		rot = { 0.054, 0.536, -0.005, -0.875 };
+
+		enemy.setType("Troll");
+		enemy.setPosition(pos);
+		enemy.setRotation(rot);
+
+		std::cout << "Type, position and rotation of enemy updated." << std::endl;
+
+		std::cin.ignore();
+
 
 		vect.erase(vect.begin());
 

@@ -16,7 +16,7 @@ public:
 	coordinates::Quaternion getRotation() const { return m_rotation; }
 
 	void setPosition(const coordinates::Position& pos) { m_position = pos; }
-	void setName(const std::string& type) { m_type = type; }
+	void setType(const std::string& type) { m_type = type; }
 	void setRotation(const coordinates::Quaternion& rot) { m_rotation = rot; }
 
 private:
