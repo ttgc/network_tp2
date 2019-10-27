@@ -15,21 +15,16 @@
 
 int main(int argc, char* argv[])
 {
-	bool choice;
-	std::string ip;
-	uint16_t port;
-	
-	ip = argv[2];
-	port = atoi(argv[3]);
-
-	
-
-	if (argc < 3) 
+	if (argc < 4) 
 	{
 		return EXIT_FAILURE;
 	}
 
-	if (argv[1] == "server") 
+	std::string mode(argv[1]);
+	std::string ip(argv[2]);
+	uint16_t port(atoi(argv[3]));
+
+	if (mode == "server") 
 	{
 		
 		server::Server server(ip, port);
@@ -135,7 +130,7 @@ int main(int argc, char* argv[])
 
 
 	}
-	else if(argv[1] == "client")
+	else if(mode == "client")
 	{
 		
 		client::Client client(ip, port);
