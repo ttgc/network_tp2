@@ -3,11 +3,10 @@
 namespace client
 {
     Client::Client(const std::string& ip, uint16_t port) noexcept :
-        m_ConnectionClient(), m_repManager()
+        m_ConnectionClient(), m_repManager(), m_loop(uvw::Loop::getDefault())
         {
-            auto loop = uvw::Loop::getDefault(); 
-            // mettre la loop en paramètre et ne pas l'initialiser dans le constructeur ?
-            auto tcp = loop->resource<uvw::TCPHandle>();
+            auto tcp = m_loop->resource<uvw::TCPHandle>();
+            m_loop->run();
 
             tcp->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &, uvw::TCPHandle &)
             {
@@ -37,7 +36,7 @@ namespace client
 
             tcp->connect(ip, port);
         }
-        
+
         Client::~Client() noexcept
         {
             m_ConnectionClient->stop();

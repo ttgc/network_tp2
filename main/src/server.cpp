@@ -3,10 +3,11 @@
 namespace server
 {
     Server::Server(const std::string& ip, uint16_t port) noexcept :
-        m_listClient()
-        {
-            auto loop = uvw::Loop::getDefault();
-            std::shared_ptr<uvw::TCPHandle> tcp = loop->resource<uvw::TCPHandle>();
+        m_listClient(), m_loopThread(nullptr), m_loop(uvw::Loop::getDefault())
+        {   
+            std::shared_ptr<uvw::TCPHandle> tcp = m_loop->resource<uvw::TCPHandle>();
+
+            m_loopThread = std::make_unique<std::thread>([this]() { m_loop->run(); });
 
             tcp->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &, uvw::TCPHandle &) 
             {

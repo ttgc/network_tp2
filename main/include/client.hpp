@@ -26,6 +26,7 @@ namespace client
 
        		std::shared_ptr<uvw::TCPHandle> m_ConnectionClient;
             ReplicationManager m_repManager;
+            std::shared_ptr<uvw::Loop> m_loop;
     };
 
 }
