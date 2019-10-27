@@ -35,6 +35,7 @@ namespace client
 
         Client::~Client() noexcept
         {
+            m_ConnectionClient->stop();
             m_ConnectionClient->close();
         }
 }
