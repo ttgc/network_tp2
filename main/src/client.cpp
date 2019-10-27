@@ -6,7 +6,6 @@ namespace client
         m_ConnectionClient(), m_loop(uvw::Loop::getDefault())
         {
             auto tcp = m_loop->resource<uvw::TCPHandle>();
-            m_loop->run();
 
             tcp->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &, uvw::TCPHandle &)
             {
@@ -36,11 +35,14 @@ namespace client
             m_ConnectionClient = tcp;
 
             tcp->connect(ip, port);
+            
+            m_loop->run();
         }
 
         Client::~Client() noexcept
         {
             m_ConnectionClient->stop();
+            m_ConnectionClient->clear();
             m_ConnectionClient->close();
         }
 }

@@ -7,8 +7,6 @@ namespace server
         {   
             std::shared_ptr<uvw::TCPHandle> tcp = m_loop->resource<uvw::TCPHandle>();
 
-            m_loopThread = std::make_unique<std::thread>([this]() { m_loop->run(); });
-
             tcp->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &, uvw::TCPHandle &) 
             {
                 std::cout << "An error as occured" << std::endl;
@@ -39,6 +37,8 @@ namespace server
         
             tcp->bind(ip, port);
             tcp->listen();
+
+            m_loopThread = std::make_unique<std::thread>([this]() { m_loop->run(); });
         }
 
         Server::~Server() noexcept
@@ -56,11 +56,10 @@ namespace server
     void Server::Send(uint8_t* ptr, int SIZE) noexcept
     {
         char* pointeur = reinterpret_cast<char*>(ptr);
-        if(!m_listClient.empty())
-        {
-            std::for_each(m_listClient.begin(), m_listClient.end(),[pointeur, SIZE](std::shared_ptr<uvw::TCPHandle> client) {
-                client->write(pointeur, SIZE);
-            });
-        }
+        std::for_each(m_listClient.begin(), m_listClient.end(),[pointeur, SIZE](std::shared_ptr<uvw::TCPHandle> client) {
+            if (!(client == nullptr) || !(client->closing()))
+            client->write(pointeur, SIZE);
+        });
+    
     }
 }
