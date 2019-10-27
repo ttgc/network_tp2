@@ -37,12 +37,7 @@ namespace client
 
             tcp->connect(ip, port);
         }
-/*
-mkdir output
-cd output/
-cmake ..
-cmake --build .
-*/
+        
         Client::~Client() noexcept
         {
             m_ConnectionClient->stop();
