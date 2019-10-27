@@ -1,38 +1,74 @@
 #include <iostream>
 #include <string>
+#include <vector>
+
 
 #include "game_object.hpp"
 #include "classregistry.hpp"
 #include "enemy.hpp"
 #include "player.hpp"
+#include "server.hpp"
+#include "client.hpp"
+#include "replicationmanager.hpp"
+#include "streams.hpp"
 
 int main(int argc, char* argv[])
 {
 	bool choice;
 	std::string ip;
-	std::string port;
-
+	uint16_t port;
+	
 	ip = argv[2];
-	port = argv[3];
+	port = atoi(argv[3]);
 
+	
+
+	if (argc < 3) 
+	{
+		return EXIT_FAILURE;
+	}
 
 	if (argv[1] == "server") 
 	{
-
+		
+		server::Server server(ip, port);
 		const auto registry = ClassRegistry::get();
+		const auto replication = ReplicationManager::get();
+		
+		OutputStream stream;
 
-		std::string server;
-		server = argv[1];
+		std::vector<GameObject*> vect;
+
+		registry.lock()->registerClass<GameObject>(GameObject::CreateInstance);
+		registry.lock()->registerClass<Player>(Player::CreateInstance);
+		registry.lock()->registerClass<Enemy>(Enemy::CreateInstance);
+
 
 		//create server
 
-		registry.lock()->registerClass<GameObject>(GameObject::CreateInstance);
+		
+		GameObject object;
+
+		vect.push_back(&object);
+		replication.lock()->replicate(stream, vect);
+		
 		std::cin.ignore();
 
-		registry.lock()->registerClass<Player>(Player::CreateInstance);
+		Player player;
+
+		vect.push_back(&player);
+		replication.lock()->replicate(stream, vect);
+
 		std::cin.ignore();
 
-		registry.lock()->registerClass<Enemy>(Enemy::CreateInstance);
+		Enemy enemy;
+
+		vect.push_back(&enemy);
+		replication.lock()->replicate(stream, vect);
+
+		std::cin.ignore();
+
+		vect.erase(vect.begin());
 
 		std::cin.ignore();
 
