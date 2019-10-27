@@ -10,7 +10,7 @@ void Player::write(OutputStream& stream)
 	compression::CompressorCollection compressors;
 	auto compressedPosition = compressors.posCompressor(m_position);
 	auto compressedRotation = compressors.quaternionCompressor(m_rotation);
-	//stream.WriteStr(m_name);
+	stream.WriteStr(m_name);
 	stream.Write<uint32_t>(compressedPosition.x);
 	stream.Write<uint32_t>(compressedPosition.y);
 	stream.Write<uint32_t>(compressedPosition.z);
@@ -23,7 +23,7 @@ void Player::write(OutputStream& stream)
 void Player::read(InputStream& stream)
 {
 	compression::UncompressorCollection uncompressors;
-	//m_name = stream.ReadStr();
+	m_name = stream.ReadStr();
 	coordinates::compressed::Position compressedPosition;
 	coordinates::compressed::Quaternion compressedRotation;
 
