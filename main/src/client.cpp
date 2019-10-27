@@ -20,12 +20,12 @@ namespace client
                 tcp.close();
             });
 
-            tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &)
+            tcp->on<uvw::DataEvent>([this](const uvw::DataEvent& evt, uvw::TCPHandle &)
             {
-                std::cout << "Replication data : " << evt.data << " received." << std::endl;
+                std::cout << "Replication data : " << evt.data.get() << " received." << std::endl;
                 gsl::span<char> receivedData(evt.data.get(), evt.length);
                 InputStream receivedStream(receivedData);
-                m_repManager.Replicate(receivedStream);
+                m_repManager.replicate(receivedStream);
             });
 
             m_ConnectionClient = tcp;
