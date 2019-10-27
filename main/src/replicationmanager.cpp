@@ -2,7 +2,15 @@
 #include "classregistry.hpp"
 #include "LinkingContext.hpp"
 
+std::shared_ptr<ReplicationManager> ReplicationManager::s_instance = nullptr;
 utils::PacketType ReplicationManager::s_syncPacket = utils::PacketType::Sync;
+
+std::weak_ptr<ReplicationManager> ReplicationManager::get()
+{
+	class ReplicationManagerInitializer : public ReplicationManager {};
+	if (s_instance == nullptr) s_instance = std::make_shared<ReplicationManagerInitializer>();
+	return s_instance;
+}
 
 void ReplicationManager::replicate(MemoryStream& stream, const std::vector<GameObject*> objects)
 {
