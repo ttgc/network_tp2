@@ -8,8 +8,8 @@ using NetworkID = uint32_t;
 class LinkingContext
 {
 public:
+	static std::weak_ptr<LinkingContext> get();
 
-	LinkingContext();
 	void addGameObjectAndID(NetworkID id, GameObject* obj);
 
 	void deletePointer(GameObject* obj);
@@ -19,6 +19,11 @@ public:
 	std::optional<GameObject*> getObjectFromID(NetworkID id);
 
 private:
+	LinkingContext() = default;
+	LinkingContext(const LinkingContext&) = delete;
+	LinkingContext& operator=(const LinkingContext&) = delete;
+	static std::shared_ptr<LinkingContext> s_instance;
+
 	std::map<NetworkID, GameObject*> idObjt;
 	std::map<GameObject*, NetworkID> pointObjt;
 };
