@@ -12,7 +12,7 @@ std::weak_ptr<ReplicationManager> ReplicationManager::get()
 	return s_instance;
 }
 
-void ReplicationManager::replicate(MemoryStream& stream, const std::vector<GameObject*> objects)
+void ReplicationManager::replicate(MemoryStream& stream, const std::vector<GameObject*>& objects)
 {
 	stream.Flush();
 	stream.Write<const uint32_t>(utils::PROTOCOL_ID);
