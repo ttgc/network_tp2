@@ -19,21 +19,17 @@ namespace server
                 client->on<uvw::CloseEvent>([ptr = srv.shared_from_this(), this](const uvw::CloseEvent &, uvw::TCPHandle &) 
                 {
                     ptr->close();
-                    if (!m_listClient.empty())
-                    {
-                        auto res = std::remove(m_listClient.begin(), m_listClient.end(), ptr);
-                        m_listClient.erase(res, m_listClient.end());
-                    }
+                    auto res = std::remove_if(m_listClient.begin(), m_listClient.end(), [](std::shared_ptr<uvw::TCPHandle> cli) { 
+                        return (cli == nullptr || cli->closing());
+                    });
                 });
                 
                 client->on<uvw::EndEvent>([this](const uvw::EndEvent &, uvw::TCPHandle &client) 
                 {
                     client.close();
-                    if (!m_listClient.empty())
-                    {
-                        auto res = std::remove(m_listClient.begin(), m_listClient.end(), client);
-                        m_listClient.erase(res, m_listClient.end());
-                    }
+                    auto res = std::remove_if(m_listClient.begin(), m_listClient.end(), [](std::shared_ptr<uvw::TCPHandle> cli) { 
+                        return (cli == nullptr || cli->closing());
+                    });
                 });
                 srv.accept(*client);
                 client->read();
