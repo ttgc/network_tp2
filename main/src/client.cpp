@@ -3,7 +3,7 @@
 namespace client
 {
     Client::Client(const std::string& ip, uint16_t port) noexcept :
-        m_ConnectionClient()//, m_repManager()
+        m_ConnectionClient(), m_repManager()
         {
             auto loop = uvw::Loop::getDefault(); 
             // mettre la loop en paramètre et ne pas l'initialiser dans le constructeur ?
@@ -22,7 +22,7 @@ namespace client
 
             tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &)
             {
-                std::cout << evt.data << std::endl;
+                std::cout << "Replication data : " << evt.data << " received." << std::endl;
                 gsl::span<char> receivedData(evt.data.get(), evt.length);
                 InputStream receivedStream(receivedData);
                 m_repManager.Replicate(receivedStream);

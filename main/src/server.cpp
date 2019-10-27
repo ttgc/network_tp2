@@ -64,7 +64,6 @@ namespace server
             std::for_each(m_listClient.begin(), m_listClient.end(),[pointeur, SIZE](std::shared_ptr<uvw::TCPHandle> client) {
                 client->write(pointeur, SIZE);
             });
-
         }
     }
 }

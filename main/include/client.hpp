@@ -8,6 +8,7 @@
 #include <atomic>
 #include <iostream>
 #include <stream.hpp>
+#include "replicationmanager.hpp"
 
 namespace client
 {
@@ -24,9 +25,7 @@ namespace client
         private:
 
        		std::shared_ptr<uvw::TCPHandle> m_ConnectionClient;
-            //ReplicationManagern m_repManager
-//            std::unique_ptr<std::thread> m_runThread;
-//            void run() noexcept;
+            ReplicationManager m_repManager;
     };
 
 }
