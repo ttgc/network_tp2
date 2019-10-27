@@ -17,7 +17,7 @@ namespace server
             Server(const std::string& ip, uint16_t port) noexcept;
             virtual ~Server() noexcept;
             Server(Server&& other) = default;
-            Server(const Server& other) = default;
+            Server(const Server& other) = delete;
             Server& operator=(const Server& s) = delete;
 
         private:
