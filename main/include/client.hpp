@@ -7,7 +7,7 @@
 #include <thread>
 #include <atomic>
 #include <iostream>
-#include <stream.hpp>
+#include "streams.hpp"
 #include "replicationmanager.hpp"
 
 namespace client
