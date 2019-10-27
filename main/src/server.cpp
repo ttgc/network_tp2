@@ -51,6 +51,11 @@ namespace server
                 }
             );
             m_listClient.clear();
+
+			if (m_loopThread != nullptr && m_loopThread->joinable())
+			{
+				m_loopThread->join();
+			}
         }
 
     void Server::Send(uint8_t* ptr, int SIZE) noexcept
