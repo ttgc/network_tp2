@@ -7,6 +7,7 @@
 #include <thread>
 #include <atomic>
 #include <iostream>
+#include <stream.hpp>
 
 namespace client
 {
@@ -23,8 +24,9 @@ namespace client
         private:
 
        		std::shared_ptr<uvw::TCPHandle> m_ConnectionClient;
-            std::unique_ptr<std::thread> m_runThread;
-            void run() noexcept;
+            //ReplicationManagern m_repManager
+//            std::unique_ptr<std::thread> m_runThread;
+//            void run() noexcept;
     };
 
 }

@@ -16,7 +16,6 @@ namespace server
             tcp->on<uvw::ListenEvent>([this](const uvw::ListenEvent &, uvw::TCPHandle &srv) {
                 std::shared_ptr<uvw::TCPHandle> client = srv.loop().resource<uvw::TCPHandle>();
 
-// faire un remove if sur le vecteur, puis faire un erase.
                 client->on<uvw::CloseEvent>([ptr = srv.shared_from_this(), this](const uvw::CloseEvent &, uvw::TCPHandle &) 
                 {
                     ptr->close();
@@ -43,9 +42,6 @@ namespace server
         
             tcp->bind(ip, port);
             tcp->listen();
-            
-            //std::string cli = ip + ":" + std::to_string(port);
-            //m_serverThread = std::make_unique<std::thread>([this]() {run();});
         }
 
         Server::~Server() noexcept
@@ -60,12 +56,8 @@ namespace server
             m_listClient.clear();
         }
 
-// Destructeur clear et stop
-
     void Server::Send(uint8_t* ptr, int SIZE) noexcept
     {
-        //std::reinterpret_pointer_cast
-        //send(ptr, nullptr, SIZE, 0);
         char* pointeur = reinterpret_cast<char*>(ptr);
         if(!m_listClient.empty())
         {

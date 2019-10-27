@@ -23,9 +23,7 @@ namespace server
         private:
 
        		std::vector<std::shared_ptr<uvw::TCPHandle>> m_listClient;
-//            std::unique_ptr<std::thread> m_serverThread;
             void Send(uint8_t* ptr, int SIZE) noexcept;
-//            void run() noexcept;
     };
 
 }
