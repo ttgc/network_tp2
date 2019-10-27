@@ -32,7 +32,7 @@ void conn(uvw::Loop &loop) {
     });
 
     tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &){
-        std::cout << evt.data << std::endl;
+        std::cout << evt.data.get() << std::endl;
     });
 
     tcp->connect(std::string{"127.0.0.1"}, 4242);

@@ -8,13 +8,14 @@
 #include <gsl/gsl>
 
 #include "utils.hpp"
+#include "networkutils.hpp"
 
 class MemoryStream
 {
 public:
     MemoryStream() : m_cursor(0)
     {
-        m_buffer.reserve(64);
+        m_buffer.reserve(utils::MAX_PACKET_SIZE);
     }
 
     void Write(gsl::not_null<void*> data, size_t length);
@@ -38,7 +39,7 @@ public:
         Write((void*)&data, sizeof(data));
     }
 
-    size_t Size() { return m_buffer.size(); }
+    size_t Size() const { return m_buffer.size(); }
     size_t RemainingSize() const { return m_buffer.size() - m_cursor; }
 
     gsl::span<std::byte> Read(size_t length)
