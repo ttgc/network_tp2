@@ -27,6 +27,7 @@ namespace server
        		std::vector<std::shared_ptr<uvw::TCPHandle>> m_listClient;
             std::unique_ptr<std::thread> m_loopThread;
             std::shared_ptr<uvw::Loop> m_loop;
+			std::shared_ptr<uvw::TCPHandle> m_socket;
     };
 
 }

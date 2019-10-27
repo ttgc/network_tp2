@@ -12,7 +12,7 @@ std::weak_ptr<ReplicationManager> ReplicationManager::get()
 	return s_instance;
 }
 
-void ReplicationManager::replicate(MemoryStream& stream, const std::vector<GameObject*> objects)
+void ReplicationManager::replicate(MemoryStream& stream, const std::vector<GameObject*>& objects)
 {
 	stream.Flush();
 	stream.Write<const uint32_t>(utils::PROTOCOL_ID);
@@ -72,19 +72,24 @@ void ReplicationManager::replicate(MemoryStream& stream)
 		}
 	);
 	auto _ = std::for_each(toRemove.begin(), toRemove.end(), [this, ctx](GameObject* obj) {
-		m_replicated.erase(obj);
-		ctx.lock()->deletePointer(obj);
-		obj->destroy();
-		delete obj;
+		if (obj != nullptr)
+		{
+			m_replicated.erase(obj);
+			ctx.lock()->deletePointer(obj);
+			obj->destroy();
+			delete obj;
+		}
 	});
 	stream.Flush();
 }
 
-std::vector<GameObject> ReplicationManager::getObjects()
+std::vector<GameObject*> ReplicationManager::getObjects()
 {
-	std::vector<GameObject> objects(m_replicated.size());
-	std::transform(m_replicated.begin(), m_replicated.end(), objects.begin(), 
+	std::vector<GameObject*> objects(m_replicated.size());
+	/*std::transform(m_replicated.begin(), m_replicated.end(), objects.begin(), 
 		[](GameObject* obj) -> GameObject { return GameObject(*obj); }
 	);
+	return objects;*/
+	std::copy(m_replicated.begin(), m_replicated.end(), objects.begin());
 	return objects;
 }

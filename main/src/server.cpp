@@ -3,20 +3,21 @@
 namespace server
 {
     Server::Server(const std::string& ip, uint16_t port) noexcept :
-        m_listClient(), m_loopThread(nullptr), m_loop(uvw::Loop::getDefault())
+        m_listClient(), m_loopThread(nullptr), m_loop(uvw::Loop::getDefault()), m_socket()
         {   
-            std::shared_ptr<uvw::TCPHandle> tcp = m_loop->resource<uvw::TCPHandle>();
+            m_socket = m_loop->resource<uvw::TCPHandle>();
 
-            tcp->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &, uvw::TCPHandle &) 
+			m_socket->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &, uvw::TCPHandle &)
             {
                 std::cout << "An error as occured" << std::endl;
             });
 
-            tcp->on<uvw::ListenEvent>([this](const uvw::ListenEvent &, uvw::TCPHandle &srv) {
+			m_socket->on<uvw::ListenEvent>([this](const uvw::ListenEvent &, uvw::TCPHandle &srv) {
                 std::shared_ptr<uvw::TCPHandle> client = srv.loop().resource<uvw::TCPHandle>();
 
                 client->on<uvw::CloseEvent>([ptr = srv.shared_from_this(), this](const uvw::CloseEvent &, uvw::TCPHandle &) 
                 {
+					std::cout << "Client disconnected" << std::endl;
                     ptr->close();
                     auto res = std::remove_if(m_listClient.begin(), m_listClient.end(), [](std::shared_ptr<uvw::TCPHandle> cli) { 
                         return (cli == nullptr || cli->closing());
@@ -25,6 +26,7 @@ namespace server
                 
                 client->on<uvw::EndEvent>([this](const uvw::EndEvent &, uvw::TCPHandle &client) 
                 {
+					std::cout << "Client disconnected" << std::endl;
                     client.close();
                     auto res = std::remove_if(m_listClient.begin(), m_listClient.end(), [](std::shared_ptr<uvw::TCPHandle> cli) { 
                         return (cli == nullptr || cli->closing());
@@ -35,8 +37,8 @@ namespace server
                 m_listClient.push_back(client);
             });
         
-            tcp->bind(ip, port);
-            tcp->listen();
+			m_socket->bind(ip, port);
+			m_socket->listen();
 
             m_loopThread = std::make_unique<std::thread>([this]() { m_loop->run(); });
         }
@@ -51,6 +53,10 @@ namespace server
                 }
             );
             m_listClient.clear();
+
+			m_socket->stop();
+			m_socket->clear();
+			m_socket->close();
 
 			if (m_loopThread != nullptr && m_loopThread->joinable())
 			{

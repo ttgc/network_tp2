@@ -38,10 +38,12 @@ void LinkingContext::deletePointer(GameObject* obj)
 void LinkingContext::addGameObject(GameObject* obj)
 {
 
-	NetworkID id = std::max_element(idObjt.begin(), idObjt.end(), [](const std::pair<NetworkID, GameObject*> a, const std::pair<NetworkID, GameObject*> b)
+	const auto iterator = std::max_element(idObjt.begin(), idObjt.end(), [](const std::pair<NetworkID, GameObject*> a, const std::pair<NetworkID, GameObject*> b)
 		{
 			return a.first < b.first;
-		})->first + 1;
+		});
+
+	NetworkID id = iterator != idObjt.end() ? iterator->first + 1 : 0;
 
 	idObjt.insert(std::pair<NetworkID, GameObject*>(id, obj));
 	pointObjt.insert(std::pair<GameObject*, NetworkID>(obj, id));

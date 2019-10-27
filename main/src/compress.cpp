@@ -62,6 +62,6 @@ namespace compression
 	uint16_t QuaternionCompressor::compressFloat(float value) const noexcept
 	{
 		const auto compressed = (value * 1000) + 1000;
-		return static_cast<uint32_t>(compressed);
+		return static_cast<uint16_t>(compressed);
 	}
 }

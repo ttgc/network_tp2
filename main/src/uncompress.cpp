@@ -29,27 +29,27 @@ namespace compression
 		switch (value.missing)
 		{
 		case QuaternionParameterType::x:
-			result.y = value.first;
-			result.z = value.second;
-			result.w = value.third;
+			result.y = uncompressFloat(value.first);
+			result.z = uncompressFloat(value.second);
+			result.w = uncompressFloat(value.third);
 			result.x = recalculatorCallback(result.y, result.z, result.w);
 			break;
 		case QuaternionParameterType::y:
-			result.x = value.first;
-			result.z = value.second;
-			result.w = value.third;
+			result.x = uncompressFloat(value.first);
+			result.z = uncompressFloat(value.second);
+			result.w = uncompressFloat(value.third);
 			result.y = recalculatorCallback(result.x, result.z, result.w);
 			break;
 		case QuaternionParameterType::z:
-			result.x = value.first;
-			result.y = value.second;
-			result.w = value.third;
+			result.x = uncompressFloat(value.first);
+			result.y = uncompressFloat(value.second);
+			result.w = uncompressFloat(value.third);
 			result.z = recalculatorCallback(result.x, result.y, result.w);
 			break;
 		case QuaternionParameterType::w:
-			result.x = value.first;
-			result.y = value.second;
-			result.z = value.third;
+			result.x = uncompressFloat(value.first);
+			result.y = uncompressFloat(value.second);
+			result.z = uncompressFloat(value.third);
 			result.w = recalculatorCallback(result.x, result.y, result.z);
 			break;
 		}
