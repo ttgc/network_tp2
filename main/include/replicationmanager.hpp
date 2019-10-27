@@ -11,7 +11,7 @@ class ReplicationManager
 public:
 	static std::weak_ptr<ReplicationManager> get();
 
-	void replicate(MemoryStream& stream, const std::vector<GameObject*> objects);
+	void replicate(MemoryStream& stream, const std::vector<GameObject*>& objects);
 	void replicate(MemoryStream& stream);
 
 	std::vector<GameObject> getObjects();
