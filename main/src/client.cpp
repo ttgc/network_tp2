@@ -25,7 +25,7 @@ namespace client
                 gsl::span<char> receivedData(evt.data.get(), evt.length);
                 InputStream receivedStream(receivedData);
                 m_repManager.replicate(receivedStream);
-                std::vector<GameObject> vectObjects;
+                std::vector<GameObject> vectObjects = m_repManager.getObjects();
                 std::for_each(vectObjects.begin(), vectObjects.end(), [this](auto Obj) 
                     {
                         std::cout << "Replication data : " << Obj << " received." << std::endl;
@@ -37,7 +37,12 @@ namespace client
 
             tcp->connect(ip, port);
         }
-
+/*
+mkdir output
+cd output/
+cmake ..
+cmake --build .
+*/
         Client::~Client() noexcept
         {
             m_ConnectionClient->stop();
