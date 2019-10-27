@@ -53,6 +53,8 @@ int main(int argc, char* argv[])
 		replication.lock()->replicate(stream, vect);
 
 		std::cout << "Object has been added." << std::endl;
+
+		server.Send(reinterpret_cast<uint8_t*>(stream.Data().data()), stream.Size());
 		
 		std::cin.ignore();
 
@@ -70,6 +72,8 @@ int main(int argc, char* argv[])
 		replication.lock()->replicate(stream, vect);
 
 		std::cout << "Player has been added." << std::endl;
+
+		server.Send(reinterpret_cast<uint8_t*>(stream.Data().data()), stream.Size());
 
 		std::cin.ignore();
 
@@ -89,6 +93,8 @@ int main(int argc, char* argv[])
 
 		std::cout << "Enemy has been added." << std::endl;
 
+		server.Send(reinterpret_cast<uint8_t*>(stream.Data().data()), stream.Size());
+
 		std::cin.ignore();
 
 
@@ -101,6 +107,8 @@ int main(int argc, char* argv[])
 
 		std::cout << "Name, position and rotation of player updated." << std::endl;
 
+		server.Send(reinterpret_cast<uint8_t*>(stream.Data().data()), stream.Size());
+
 		std::cin.ignore();
 
 		pos = { 26, 334.632, 159.053 };
@@ -112,12 +120,16 @@ int main(int argc, char* argv[])
 
 		std::cout << "Type, position and rotation of enemy updated." << std::endl;
 
+		server.Send(reinterpret_cast<uint8_t*>(stream.Data().data()), stream.Size());
+
 		std::cin.ignore();
 
 
 		vect.erase(vect.begin());
 
 		std::cout << "Object has been deleted." << std::endl;
+
+		server.Send(reinterpret_cast<uint8_t*>(stream.Data().data()), stream.Size());
 
 		std::cin.ignore();
 
